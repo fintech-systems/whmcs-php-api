@@ -33,6 +33,9 @@
             "providers": [
                 "FintechSystems\\Whmcs\\WhmcsServiceProvider"
             ]            
+        },
+        "aliases": {
+            "Whmcs": "FintechSystems\\Whmcs\\Facades\\Whmcs"
         }
     }
 }

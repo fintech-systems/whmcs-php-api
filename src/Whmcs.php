@@ -11,7 +11,7 @@ class Whmcs implements BillingProvider
     private $api_secret;
 
     public function __construct($client)
-    {
+    {        
         $this->url            = $client['url'];
         $this->api_identifier = $client['api_identifier'];
         $this->api_secret     = $client['api_secret'];

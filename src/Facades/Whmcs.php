@@ -4,7 +4,7 @@ namespace FintechSystems\Whmcs\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
-class WhmcsApi extends Facade
+class Whmcs extends Facade
 {
     protected static function getFacadeAccessor()
     {
