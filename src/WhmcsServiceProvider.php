@@ -1,10 +1,10 @@
 <?php
 
-namespace FintechSystems\WhmcsApi;
+namespace FintechSystems\Whmcs;
 
 use Illuminate\Support\ServiceProvider;
 
-class WhmcsApiServiceProvider extends ServiceProvider
+class WhmcsServiceProvider extends ServiceProvider
 {
     public function boot()
     {
@@ -20,11 +20,11 @@ class WhmcsApiServiceProvider extends ServiceProvider
         );
 
         $this->app->bind('whmcs-api', function () {
-            return new WhmcsApi([
-                'url'            => env('WHMCS_URL'),
-                'api_identifier' => env('WHMCS_API_IDENTIFIER'),
-                'api_secret'     => env('WHMCS_API_SECRET'),
-            ], env('WHMCS_API_MODE'));
+            return new Whmcs([                
+                'url'            => config('whmcs.url'),
+                'api_identifier' => config('whmcs.api_identifier'),
+                'api_secret'     => config('whmcs.api_secret'),
+            ]);
         });
     }
 }

@@ -1,8 +1,8 @@
 <?php
 
-namespace FintechSystems\WhmcsApi\Contracts;
+namespace FintechSystems\Whmcs\Contracts;
 
 interface BillingProvider
 {
-    public function changePackage();
+    public function changePlan(Array $data);
 }
