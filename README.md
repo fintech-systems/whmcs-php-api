@@ -10,6 +10,17 @@ Requirements:
 
 # Usage
 
+## WHMCS API Permissions
+
+- You need to allow the IP address of the computer connecting to WHMCS
+- You need to set API permissions
+
+If you want to use the custom API call `getclientbyphonenumber` you need to manually update `tblapi_roles` every time you make a change because the UI will overwrite the custom API call.
+
+```
+{"addclient":1,"getclientsdetails":1,"getclientbyphonenumber":1}
+```
+
 ## Framework Agnostic PHP
 
 ```php
@@ -39,7 +50,23 @@ Publish the configuration file:
 
 `php artisan vendor:publish`
 
+## Changelog
+
+Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
+
 # Features
+
+## Set Server
+
+Provides the ability to connect to a secondary WHMCS server away from the Facade initiation
+
+```php
+Whmcs::setServer([
+    'url'            => $_ENV['WHMCS_URL2'],
+    'api_secret'     => $_ENV['WHMCS_API_SECRET2'],
+    'api_identifier' => $_ENV['WHMCS_API_IDENTIFIER2'],
+])
+```
 
 Change Package
 
@@ -56,6 +83,17 @@ $api->changePackage($newServiceId);
 
 Laravel App:
 
+## Change server
+
+Since we're using a Facade that's instantiated when it's called, we need some other way to call the contructor when we're connecting to another server.
+
+```php
+public function setServer($server) {
+        $this->url            = $server['url'];
+        $this->api_identifier = $server['api_identifier'];
+        $this->api_secret     = $server['api_secret'];
+    }
+```
 
 ```php
 $newServiceId = 5;

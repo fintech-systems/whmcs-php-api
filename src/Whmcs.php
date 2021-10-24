@@ -45,6 +45,13 @@ class Whmcs implements BillingProvider
         $this->call($action, $serviceId);
     }
 
+    /**
+     * getClientsDetails
+     * 
+     * https://developers.whmcs.com/api-reference/getclientsdetails/
+     * 
+     * The client id to obtain the details for. $clientid or $email is required
+     */
     public function getClientsDetails($client)
     {
         $action = "GetClientsDetails";
@@ -124,6 +131,7 @@ class Whmcs implements BillingProvider
             'action'       => $action,
             'responsetype' => 'json',
         );
+                
         if ($data) {
             $postfields = array_merge($data, $postfields);
         }
@@ -151,22 +159,8 @@ class Whmcs implements BillingProvider
         }
         curl_close($ch);
 
-        ray($response);
-
         ray (json_decode($response, true));
         
         return json_decode($response, true);
-
-        $jsonData = json_decode($response, true);
-                
-        if ($jsonData['result'] == "error") {
-            $message = "WHMCS API error for action $action: {$jsonData['message']}";
-
-            ray($message);
-            
-            return null;
-        }
-        
-        return $jsonData;
     }
 }
