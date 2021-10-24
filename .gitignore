@@ -29,3 +29,4 @@ Homestead.json
 /build/
 coverage.xml
 /.idea
+.scp

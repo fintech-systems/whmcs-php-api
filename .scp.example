@@ -1,0 +1,1 @@
+scp -P22 src/getclientbyphonenumber.php user@server.example.com:/home/user/whmcs.example.com/public/includes/api/
