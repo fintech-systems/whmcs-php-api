@@ -48,7 +48,7 @@ $result = $api->getClients();
 
 Publish the configuration file:
 
-`php artisan vendor:publish`
+`php artisan vendor:publish --tag=whmcs-config`
 
 ## Changelog
 

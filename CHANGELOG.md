@@ -2,7 +2,7 @@
 
 All notable changes to `whmcs-api` will be documented in this file.
 
-## v0.0.2 - 2021-10-24
+## v0.0.3 - 2021-10-24
 
 - added ability to switch to another server (setServer(url, api identifier, api secret)
 - added tests to test setServer ability
