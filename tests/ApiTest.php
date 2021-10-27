@@ -80,6 +80,16 @@ test('it can find a South African user by telephone number without spaces in the
     expect($result)->toHaveKey('result', 'success');
 });
 
+test('it can find a South African user by telephone with spaces in the billing system', function () use ($config) {
+    $whmcs = new Whmcs($config->server);
+
+    $result = $whmcs->getClientByPhoneNumber([
+        'phonenumber' => "+27.66 245 4302",        
+    ]);
+
+    expect($result)->toHaveKey('result', 'success');
+});
+
 test('it can find a USA user by telephone number in the billing system', function () use ($config) {
     $whmcs = new Whmcs($config->server);
 
