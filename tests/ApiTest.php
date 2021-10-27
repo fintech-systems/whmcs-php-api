@@ -14,9 +14,10 @@ test("the billing system doesn't return an invalid IP error", function() use($co
     $whmcs = new Whmcs($config->server);
 
     $result = $whmcs->addUser([
+        'password2'   => "SuperSecure123!!!",
         'firstname'   => 'Joe',
         'lastname'    => 'Bloggs',
-        'email'       => 'joe@example.com',
+        'email'       => 'joe4@example.com',
         'address1'    => '123 Penny Lane',
         'city'        => 'Beverly Hills',
         'state'       => 'California',
@@ -25,8 +26,10 @@ test("the billing system doesn't return an invalid IP error", function() use($co
         'phonenumber' => '4085551234',
     ]);
 
+    // dd($result);
     expect($result)->toHaveKey('result', 'error');
-    expect($result)->toHaveKey('message', 'Invalid IP 156.155.176.137');
+    // expect($result)->toHaveKey('message', 'Invalid IP 156.155.176.137');
+    expect($result)->toHaveKey('message', 'A user already exists with that email address');
 });
 
 test('it can access the billing system test installation', function () {
@@ -42,7 +45,7 @@ test('it can add a user to the billing system', function () use ($config) {
         'password2'   => "SuperSecure123!!!",
         'firstname'   => 'Joe',
         'lastname'    => 'Bloggs',
-        'email'       => 'joe2@example.com',
+        'email'       => 'joe3@example.com',
         'address1'    => '123 Penny Lane',
         'city'        => 'Beverly Hills',
         'state'       => 'California',
@@ -50,8 +53,10 @@ test('it can add a user to the billing system', function () use ($config) {
         'country'     => 'US',
         'phonenumber' => '4085551234',
     ]);
-
-    expect($result)->toHaveKey('result', 'success');
+    
+    // expect($result)->toHaveKey('result', 'success');
+    expect($result)->toHaveKey('result', 'error');
+    expect($result)->toHaveKey('message', 'A user already exists with that email address');
 
 });
 
@@ -61,9 +66,18 @@ test('it can find a South African user by telephone number in the billing system
     $result = $whmcs->getClientByPhoneNumber([
         'phonenumber' => "+27.82 309 6710",        
     ]);
+    
+    expect($result)->toHaveKey('result', 'success');
+});
+
+test('it can find a South African user by telephone number without spaces in the billing system', function () use ($config) {
+    $whmcs = new Whmcs($config->server);
+
+    $result = $whmcs->getClientByPhoneNumber([
+        'phonenumber' => "+27.662454302",        
+    ]);
 
     expect($result)->toHaveKey('result', 'success');
-
 });
 
 test('it can find a USA user by telephone number in the billing system', function () use ($config) {

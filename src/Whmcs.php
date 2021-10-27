@@ -72,7 +72,9 @@ class Whmcs implements BillingProvider
     }
 
     /**
-     * https://whmcs.community/topic/309195-confusion-between-getclients-and-getclientsdetails-api-calls-and-how-to-retrieve-phone-numbers-in-one-shot/?tab=comments#comment-1360588
+     * This is a custom API 'getclientbyphonenumber.php'
+     * 
+     * See: https://whmcs.community/topic/309195-confusion-between-getclients-and-getclientsdetails-api-calls-and-how-to-retrieve-phone-numbers-in-one-shot/?tab=comments#comment-1360588
      */
     public function getClientByPhoneNumber(Array $data) {
         $action = "GetClientByPhoneNumber";
@@ -135,6 +137,8 @@ class Whmcs implements BillingProvider
         if ($data) {
             $postfields = array_merge($data, $postfields);
         }
+
+        ray($data);
         
         $ch = curl_init();
 
