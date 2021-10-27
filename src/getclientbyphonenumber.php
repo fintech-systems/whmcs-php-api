@@ -11,7 +11,7 @@ use WHMCS\Database\Capsule;
 if (!defined("WHMCS"))
     die("This file cannot be accessed directly");
 
-try {    
+try {
     // First check for the actual number
     $phoneNumber = $_REQUEST['phonenumber'];
 
@@ -20,40 +20,41 @@ try {
         ->first();
 
     if ($client) {
+
         $apiresults = [
             "result"   => "success",
             "message"  => "ok",
             'clientid' => $client->id,
         ];
 
-        return;
+    } else {
+        // ...then check for the number but without spaces    
+        $phoneNumberWithoutSpaces = str_replace(' ', '', $_REQUEST['phonenumber']);
+
+        $client = Capsule::table('tblclients')->where("phonenumber", $phoneNumberWithoutSpaces)->first();
+
+        if ($client) {
+            $apiresults = [
+                "result"   => "success",
+                "message"  => "ok",
+                'clientid' => $client->id,
+            ];
+
+        } else {
+
+            $apiresults = [
+                "result"  => "error",
+                "message" => "a client with number $phoneNumber was not found",
+            ];
+        }
+            
     }
 
-    // ...then check for the number but without spaces    
-    $phoneNumberWithoutSpaces = str_replace(' ', '', $_REQUEST['phonenumber']);
-
-    $client = Capsule::table('tblclients')->where("phonenumber", $phoneNumberWithoutSpaces)->first();
-
-    if ($client) {
-        $apiresults = [
-            "result"   => "success",
-            "message"  => "ok",
-            'clientid' => $client->id,
-        ];
-
-        return;
-    }
-
-    $apiresults = [
-        "result"  => "error",
-        "message" => "a client with number $phoneNumber was not found",
-    ];
-
+    
 } catch (Exception $e) {
 
     $apiresults = [
-        "result" => "exception",
+        "result" => "error",
         "message" => $e->getMessage(),
     ];
-
 }

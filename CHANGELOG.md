@@ -2,6 +2,10 @@
 
 All notable changes to `whmcs-api` will be documented in this file.
 
+## v0.0.5 - 2021-10-27
+
+- refactor to remove return statements in getclientbyphonenumber as return statement might lead to abnormal program termination via the include system
+
 ## v0.0.4 - 2021-10-27
 
 - handling of space in telephone numbers
