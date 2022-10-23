@@ -13,7 +13,7 @@ jobs:
       matrix:
         php: ["8.0", "8.1"]        
 
-    name: PHP ${{ matrix.php }} - Laravel ${{ matrix.laravel }}
+    name: PHP ${{ matrix.php }} - Pest
 
     steps:
       - name: Checkout code
@@ -33,5 +33,11 @@ jobs:
           
       - name: Execute tests
         run: vendor/bin/pest
-
-        
+        env:
+          WHMCS_URL: "http://localhost"
+          WHMCS_API_SECRET: "api-secret"
+          WHMCS_API_IDENTIFIER: "api-identifier"
+          WHMCS_URL2: "http://localhost"
+          WHMCS_API_SECRET2: "api-secret"
+          WHMCS_API_IDENTIFIER2: "api-identifier"
+      
