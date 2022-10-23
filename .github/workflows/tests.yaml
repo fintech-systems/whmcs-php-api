@@ -40,4 +40,14 @@ jobs:
           WHMCS_API_SECRET2: "api-secret"
           WHMCS_API_IDENTIFIER2: "api-identifier"
         run: vendor/bin/pest
+
+      - name: Configure .env
+        uses: SpicyPizza/create-envfile@v1.3
+        with:
+          envkey_WHMCS_URL: "http://localhost"
+          envkey_WHMCS_API_SECRET: "api-secret"
+          envkey_WHMCS_API_IDENTIFIER: "api-identifier"
+          envkey_WHMCS_URL2: "http://localhost"
+          envkey_WHMCS_API_SECRET2: "api-secret"
+          envkey_WHMCS_API_IDENTIFIER2: "api-identifier"
       
