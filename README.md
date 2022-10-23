@@ -1,5 +1,5 @@
 # WHMCS API
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/fintech-systems/whmcs-php-api) [![Build Status](https://app.travis-ci.com/fintech-systems/whmcs-php-api.svg?branch=main)](https://app.travis-ci.com/fintech-systems/whmcs-php-api) ![GitHub](https://img.shields.io/github/license/fintech-systems/whmcs-php-api)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/fintech-systems/whmcs-php-api) ![Tests](https://github.com/fintech-systems/whmcs-php-api/actions/workflows/tests.yml/badge.svg) ![GitHub](https://img.shields.io/github/license/fintech-systems/whmcs-php-api)
 
 A WHMCS API designed to run standalone or as part of a Laravel Application
 
