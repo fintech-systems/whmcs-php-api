@@ -2,17 +2,18 @@
 
 namespace FintechSystems\Whmcs;
 
+use Exception;
 use Illuminate\Support\Facades\Http;
 use FintechSystems\Whmcs\Contracts\BillingProvider;
 
 class Whmcs implements BillingProvider
-{    
+{
     private $url;
     private $api_identifier;
     private $api_secret;
 
     public function __construct($server)
-    {        
+    {
         $this->url            = $server['url'];
         $this->api_identifier = $server['api_identifier'];
         $this->api_secret     = $server['api_secret'];
@@ -21,7 +22,8 @@ class Whmcs implements BillingProvider
     /**
      * Sometimes you want to connect to another server
      */
-    public function setServer($server) {
+    public function setServer($server)
+    {
         $this->url            = $server['url'];
         $this->api_identifier = $server['api_identifier'];
         $this->api_secret     = $server['api_secret'];
@@ -36,12 +38,14 @@ class Whmcs implements BillingProvider
         return $this->call($action, $data);
     }
 
-    public function addOrder($data) {
+    public function addOrder($data)
+    {
         $action = "AddOrder";
         $this->call($action, $data);
     }
 
-    public function changePlan(Array $serviceId) {
+    public function changePlan(array $serviceId)
+    {
         $action = "ModuleChangePackage";
         $this->call($action, $serviceId);
     }
@@ -58,9 +62,9 @@ class Whmcs implements BillingProvider
         $action = "GetClientsDetails";
 
         $data = [
-            'limitnum' => 1000,            
+            'limitnum' => 1000,
         ];
-        
+
         if (isset($client['email'])) {
             $data = array_merge($data, ['email' => $client['email']]);
         }
@@ -77,7 +81,8 @@ class Whmcs implements BillingProvider
      * 
      * See: https://whmcs.community/topic/309195-confusion-between-getclients-and-getclientsdetails-api-calls-and-how-to-retrieve-phone-numbers-in-one-shot/?tab=comments#comment-1360588
      */
-    public function getClientByPhoneNumber(Array $data) {
+    public function getClientByPhoneNumber(array $data)
+    {
         $action = "GetClientByPhoneNumber";
 
         return $this->call($action, $data);
@@ -122,27 +127,42 @@ class Whmcs implements BillingProvider
         return $this->call($action, $data);
     }
 
-    public function updateService($params) {
+    public function updateService($params)
+    {
         $action = "UpdateClientProduct";
         return $this->call($action, $params);
     }
 
-    private function call($action, $data = []) {
+    private function call($action, $data = [])
+    {
+        if (!$this->url) {
+            ray('No WHMCS $url variable found');
+
+            throw new Exception('No WHMCS $url variable found');
+        }
+
         $postfields = array(
             'identifier'   => $this->api_identifier,
             'secret'       => $this->api_secret,
             'action'       => $action,
             'responsetype' => 'json',
-        );                    
+        );
         $postfields = array_merge($data, $postfields);
 
-        $apiUrl = $this->url . '/includes/api.php';        
-                        
-        $response = Http::withOptions(["verify"=>false])
+        $apiUrl = $this->url . '/includes/api.php';
+
+        $response = Http::withOptions(["verify" => false])
             ->asForm()
             ->post($apiUrl, $postfields);
-                                
+
+        if ($response->json()['result'] == 'error') {
+            ray($response->json()['message'])->red();
+
+            throw new Exception($response->json()['message']);
+        }
+
+        ray($response->json());
+
         return $response->json();
     }
-    
 }

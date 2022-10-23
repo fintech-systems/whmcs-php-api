@@ -21,11 +21,23 @@ The WHMCS API code examples relies on CURL. Mocking CURL is possible but complic
 - You need to allow the IP address of the computer connecting to WHMCS
 - You need to set API permissions
 
+## List of API permissions required:
+
+- addclient
+- getclientsdetails
+- getclientsdomains
+- custom list of API calls you are developing
+
 ### Custom API calls
 
 WHMCS removed the ability to add custom API calls but with a bit of hacking you can get it working again. 
 
-An example of a custom API call would be to get a client by their phone number. Let's call this `getclientbyphonenumber`.
+An example of a custom API call would be to get a client by their phone number. Let's call this `getclientbyphonenumber`. At least two steps are required.
+
+1. Code the API call
+2. Inject the permission into the database
+
+#### Code the API call
 
 You'll first have to first code the API function and save it here:
 `includes/api/getclientbyphoneumber.php`
@@ -182,21 +194,6 @@ If you get `Invalid Permissions: API action "addclient" is not allowed` that mea
 ## Storage folder examples
 
 The `storage` folder has examples API responses, also used for caching during tests.
-
-## Coverage reports
-
-To regenerate coverage reports:
-
-`XDEBUG_MODE=coverage ./vendor/bin/phpunit --coverage-html=tests/coverage-report`
-
-See also `.travis.yml`
-
-We have a badge for Coverage but it's problematic due to Github issues:<br>
-![Codecov branch](https://img.shields.io/codecov/c/github/fintech-systems/whmcs-api/main) 
-
-## Version Control
-
-This application uses Semantic Versioning as per https://semver.org/
 
 # Local Editing
 

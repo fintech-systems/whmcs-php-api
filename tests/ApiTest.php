@@ -20,19 +20,20 @@ test('it can access a test whmcs installation', function () {
             "verify_peer_name" => false,
         ),
     );
-    
+
     file_get_contents(env('WHMCS_URL'), false, stream_context_create($arrContextOptions));
 
     $this->assertEquals($http_response_header[0], "HTTP/1.1 200 OK");
 })->skip();
 
-test("the billing system doesn't return an invalid IP error", function () use ($config) {
+test("adding a new user to WHMCS doesn't return an invalid IP error", function () use ($config) {
     $whmcs = new Whmcs($config->server);
 
     Http::fake([
         'https://whmcs.test/includes/api.php' => Http::response([
-            "result" => "error",
-            "message" => "A user already exists with that email address"
+            "result" => "success",
+            "clientid" => 1,
+            "owner_id" => 1,
         ])
     ]);
 
@@ -40,7 +41,7 @@ test("the billing system doesn't return an invalid IP error", function () use ($
         'password2'   => "password",
         'firstname'   => 'User1',
         'lastname'    => 'Lastname1',
-        'email'       => 'user1@example.com',
+        'email'       => 'user113331@example.com',
         'address1'    => '123 Penny Lane',
         'city'        => 'Beverly Hills',
         'state'       => 'California',
@@ -49,9 +50,9 @@ test("the billing system doesn't return an invalid IP error", function () use ($
         'phonenumber' => '+27.66 245 4302',
     ]);
 
-    expect($result)->toHaveKey('result', 'error');
-
-    expect($result)->toHaveKey('message', 'A user already exists with that email address');
+    expect($result)->toHaveKey('result', 'success');
+    expect($result)->toHaveKey('clientid');
+    expect($result)->toHaveKey('owner_id');
 });
 
 test("it will add an USA user with telephone number and dashes to the system for later testing", function () use ($config) {
@@ -64,12 +65,12 @@ test("it will add an USA user with telephone number and dashes to the system for
             "owner_id" => 1,
         ])
     ]);
-   
+
     $result = $whmcs->addUser([
         'email'       => 'user1@example.com',
         'password2'   => "password",
         'firstname'   => 'First Name',
-        'lastname'    => 'Last Name',        
+        'lastname'    => 'Last Name',
         'address1'    => '123 Penny Lane',
         'city'        => 'Beverly Hills',
         'state'       => 'California',
@@ -77,11 +78,10 @@ test("it will add an USA user with telephone number and dashes to the system for
         'country'     => 'US',
         'phonenumber' => '+1.408-555-1234',
     ]);
-    
+
     expect($result)->toHaveKey('result', 'success');
     expect($result)->toHaveKey('clientid');
     expect($result)->toHaveKey('owner_id');
-
 });
 
 test('it can add a user to the billing system', function () use ($config) {
@@ -89,16 +89,17 @@ test('it can add a user to the billing system', function () use ($config) {
 
     Http::fake([
         'https://whmcs.test/includes/api.php' => Http::response([
-            "result" => "error",
-            "message" => "A user already exists with that email address"
+            "result" => "success",
+            "clientid" => 1,
+            "owner_id" => 1,
         ])
     ]);
 
     $result = $whmcs->addUser([
-        'email'       => 'user2@example.co.za',
+        'email'       => 'user23232@example.co.za',
         'password2'   => "password",
         'firstname'   => 'First Name',
-        'lastname'    => 'Last Name',        
+        'lastname'    => 'Last Name',
         'address1'    => '1 Kloof Street',
         'city'        => 'Cape Town',
         'state'       => 'Western Cape',
@@ -107,9 +108,9 @@ test('it can add a user to the billing system', function () use ($config) {
         'phonenumber' => '+27.662454302',
     ]);
 
-    expect($result)->toHaveKey('result', 'error');
-
-    expect($result)->toHaveKey('message', 'A user already exists with that email address');
+    expect($result)->toHaveKey('result', 'success');
+    expect($result)->toHaveKey('clientid');
+    expect($result)->toHaveKey('owner_id');
 });
 
 test('it can find a South African user by telephone number in the billing system', function () use ($config) {
@@ -224,4 +225,43 @@ test("it can connect to a secondary WHMCS instance using a Laravel facade and re
     ]);
 
     expect($result)->toHaveKey('result', 'success');
+});
+
+test("it can retrieve at least two domains", function () {
+    Http::fake([
+        'https://whmcs.test/includes/api.php' => Http::response([
+            "result" => "success",
+            "numreturned" => 2,
+            "domains" => [
+                "domain" => [
+                    0 => [
+                        "id" => 1,
+                        "userid" => 1,
+                        "orderid" => 1,
+                        "regtype" => "Register",
+                        "domainname" => "1234.co.za",
+                        "registrar" => "email",
+                    ],
+                    1 => [
+                        "id" => 2,
+                        "userid" => 1,
+                        "orderid" => 2,
+                        "regtype" => "Transfer",
+                        "domainname" => "example.co.za",
+                        "registrar" => "email",
+                    ],
+                ]
+            ]
+        ])
+    ]);
+
+    $result = WhmcsFacade::getClientsDomains();
+
+    expect($result)->toHaveKey('result', 'success');
+    expect($result)->toHaveKey('numreturned', 2);
+    expect($result)->toHaveKey('domains');
+
+    $count = count($result['domains']['domain']);
+
+    expect($count)->toBe(2);
 });

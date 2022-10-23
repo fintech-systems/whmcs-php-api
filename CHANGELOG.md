@@ -1,9 +1,11 @@
 # Changelog
 
-All notable changes to `whmcs-api` will be documented in this file.
+All notable changes to `whmcs-php-api` will be documented in this file.
 
 ## v0.1.0 - 2022-10-23
 
+- Added a test for getDomains
+- Added GitHub Action workflow for testing. It took hours because of .env issues and the unknown parameters to use. Copied from PayFast and eventually got it working.
 - Updated all tests to use mocks
 - Updated composer
 - Fixed README to specify Pest is actually the test suite
