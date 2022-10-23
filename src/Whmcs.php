@@ -2,6 +2,7 @@
 
 namespace FintechSystems\Whmcs;
 
+use Illuminate\Support\Facades\Http;
 use FintechSystems\Whmcs\Contracts\BillingProvider;
 
 class Whmcs implements BillingProvider
@@ -126,45 +127,22 @@ class Whmcs implements BillingProvider
         return $this->call($action, $params);
     }
 
-    private function call($action, $data = null) {
+    private function call($action, $data = []) {
         $postfields = array(
             'identifier'   => $this->api_identifier,
             'secret'       => $this->api_secret,
             'action'       => $action,
             'responsetype' => 'json',
-        );
-                
-        if ($data) {
-            $postfields = array_merge($data, $postfields);
-        }
+        );                    
+        $postfields = array_merge($data, $postfields);
 
-        ray($data);
-        
-        $ch = curl_init();
-
-        curl_setopt($ch, CURLOPT_URL, $this->url . 'includes/api.php');
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_TIMEOUT, 30);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false); // Avoid Unable to connect: 60 - SSL certificate problem: self signed certificate
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($postfields));
-
-        $response = curl_exec($ch);
-
-        if (curl_error($ch)) {
-            $message= "WHMCS API CURL error for action $action: Unable to connect: " . curl_errno($ch) . ' - ' . curl_error($ch);
-
-            ray($message);
-            
-            curl_close($ch);
-
-            return null;
-        }
-        curl_close($ch);
-
-        ray (json_decode($response, true));
-        
-        return json_decode($response, true);
+        $apiUrl = $this->url . 'includes/api.php';        
+                        
+        $response = Http::withOptions(["verify"=>false])
+            ->asForm()
+            ->post($apiUrl, $postfields);
+                                
+        return $response->json();
     }
+    
 }
