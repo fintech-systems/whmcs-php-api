@@ -7,13 +7,13 @@ use FintechSystems\Whmcs\Facades\Whmcs as WhmcsFacade;
 
 $config = new Config();
 
-test('it can test', function () {
+test('php pest is installed and operational', function () {
     expect(true)->toBeTrue();
 });
 
-test('it can access the billing system test installation', function () {
-    // This will ensure you have a development server installed locally
-    // https://whmcs.test won't have a legitimate certificate so let's skip checking for that.
+// This will ensure you have a development server installed locally and is skipped by default.
+test('it can access a test whmcs installation', function () {
+    // If using Laravel Valet, https://whmcs.test won't have a legitimate certificate so let's skip checking for that.
     $arrContextOptions = array(
         "ssl" => array(
             "verify_peer" => false,
@@ -24,7 +24,7 @@ test('it can access the billing system test installation', function () {
     file_get_contents(env('WHMCS_URL'), false, stream_context_create($arrContextOptions));
 
     $this->assertEquals($http_response_header[0], "HTTP/1.1 200 OK");
-});
+})->skip();
 
 test("the billing system doesn't return an invalid IP error", function () use ($config) {
     $whmcs = new Whmcs($config->server);
