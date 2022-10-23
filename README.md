@@ -81,9 +81,9 @@ $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 $dotenv->load();
 
 $server = [
-    'url'            => $_ENV['WHMCS_URL'],
-    'api_identifier' => $_ENV['WHMCS_API_IDENTIFIER'],
-    'api_secret'     => $_ENV['WHMCS_API_SECRET'],
+    'url'            => env('WHMCS_URL'),
+    'api_identifier' => env('WHMCS_API_IDENTIFIER'),
+    'api_secret'     => env('WHMCS_API_SECRET'),
 ];
 
 $api = new WhmcsApi($server);
@@ -109,9 +109,9 @@ Provides the ability to connect to a secondary WHMCS server away from the Facade
 
 ```php
 Whmcs::setServer([
-    'url'            => $_ENV['WHMCS_URL2'],
-    'api_secret'     => $_ENV['WHMCS_API_SECRET2'],
-    'api_identifier' => $_ENV['WHMCS_API_IDENTIFIER2'],
+    'url'            => env('WHMCS_URL2'),
+    'api_secret'     => env('WHMCS_API_SECRET2'),
+    'api_identifier' => env('WHMCS_API_IDENTIFIER2'),
 ])
 ```
 

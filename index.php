@@ -8,12 +8,12 @@ $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 $dotenv->load();
 
 $server = [
-    'url'            => $_ENV['WHMCS_URL'],
-    'api_identifier' => $_ENV['WHMCS_API_IDENTIFIER'],
-    'api_secret'     => $_ENV['WHMCS_API_SECRET'],
+    'url'            => env('WHMCS_URL'),
+    'api_identifier' => env('WHMCS_API_IDENTIFIER'),
+    'api_secret'     => env('WHMCS_API_SECRET'),
 ];
 
-$mode = $_ENV['WHMCS_API_MODE'];
+$mode = env('WHMCS_API_MODE');
 
 $api = new WhmcsApi($server, $mode);
 

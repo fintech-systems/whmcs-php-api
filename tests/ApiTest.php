@@ -20,8 +20,8 @@ test('it can access the billing system test installation', function () {
             "verify_peer_name" => false,
         ),
     );
-
-    file_get_contents($_ENV['WHMCS_URL'], false, stream_context_create($arrContextOptions));
+    
+    file_get_contents(env('WHMCS_URL'), false, stream_context_create($arrContextOptions));
 
     $this->assertEquals($http_response_header[0], "HTTP/1.1 200 OK");
 });
@@ -205,9 +205,9 @@ test('it can connect to a WHMCS instance using the Laravel facade and pull a cli
 test("it can connect to a secondary WHMCS instance using a Laravel facade and retrieve a client's details", function () {
     WhmcsFacade::setServer(
         [
-            'url'            => $_ENV['WHMCS_URL2'],
-            'api_secret'     => $_ENV['WHMCS_API_SECRET2'],
-            'api_identifier' => $_ENV['WHMCS_API_IDENTIFIER2'],
+            'url'            => env('WHMCS_URL2'),
+            'api_secret'     => env('WHMCS_API_SECRET2'),
+            'api_identifier' => env('WHMCS_API_IDENTIFIER2'),
         ]
     );
 
