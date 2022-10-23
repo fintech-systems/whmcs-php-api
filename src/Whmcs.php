@@ -136,7 +136,7 @@ class Whmcs implements BillingProvider
         );                    
         $postfields = array_merge($data, $postfields);
 
-        $apiUrl = $this->url . 'includes/api.php';        
+        $apiUrl = $this->url . '/includes/api.php';        
                         
         $response = Http::withOptions(["verify"=>false])
             ->asForm()
