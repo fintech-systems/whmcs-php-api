@@ -20,6 +20,7 @@
         }
     ],
     "require": {
+        "php": "^8.0|^8.1",
         "symfony/dotenv": "^5.3",
         "spatie/ray": "^1.30",
         "guzzlehttp/guzzle": "^7.5"        
