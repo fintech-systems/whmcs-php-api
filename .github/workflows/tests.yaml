@@ -31,8 +31,7 @@ jobs:
       - name: Install dependencies
         run: composer update --prefer-dist --no-interaction --no-progress
           
-      - name: Execute tests
-        run: vendor/bin/pest
+      - name: Execute tests        
         env:
           WHMCS_URL: "http://localhost"
           WHMCS_API_SECRET: "api-secret"
@@ -40,4 +39,5 @@ jobs:
           WHMCS_URL2: "http://localhost"
           WHMCS_API_SECRET2: "api-secret"
           WHMCS_API_IDENTIFIER2: "api-identifier"
+        run: vendor/bin/pest
       
