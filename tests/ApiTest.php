@@ -328,3 +328,19 @@ test("it can call a custom API action called 'setRegistrarSettingValue'", functi
 
     expect($result)->toHaveKey('value', 'test6@example.com');    
 });
+
+test("it can update a client's domain registrar", function() {
+    Http::fake([
+        'https://whmcs.test/includes/api.php' => Http::response([
+            "result" => "success",
+            "domainid" => 1,            
+        ])
+    ]);
+
+    $result = Whmcs::updateClientDomain(
+        1,
+        ['registrar' => 'email']
+    );
+
+    expect($result)->toHaveKey('domainid', 1);
+});
