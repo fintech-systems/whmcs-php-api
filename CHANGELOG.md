@@ -2,6 +2,21 @@
 
 All notable changes to `whmcs-php-api` will be documented in this file.
 
+## v0.1.1 - 2022-10-26
+
+- Added a custom action setregistrarvalue
+- Added a helper to add custom action to the WHMCS API, for now overwriting UpdateClientAddon
+- Added updateClientDomain command in main API
+- Added direct links to WHMCS manual for all commands
+- Added exception handling in constructor if the environment is not set
+- Moved custom API command to /includes/api to mirror WHMCS setup
+- The custom API action now have rudimentary logging
+- The README has been updated to reflect how to test when doing custom actions
+- GetClientByPhoneNumber doesn't return both result "success" and message "ok". Only result.
+- Simplified all commands to be less lines long by removing redundant action variable
+- Most commands and now alphabetical with private methods at the bottom
+- API limits are now a global variable fixed to 10000
+
 ## v0.1.0 - 2022-10-23
 
 - Added a test for getDomains
