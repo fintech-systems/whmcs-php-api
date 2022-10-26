@@ -10,7 +10,7 @@ class WhmcsServiceProvider extends ServiceProvider
     {
         $this->publishes([
             __DIR__.'/../config/whmcs.php' => config_path('whmcs.php'),
-        ], 'whmcs-config');        
+        ], 'whmcs-config');
     }
 
     public function register()
@@ -20,10 +20,10 @@ class WhmcsServiceProvider extends ServiceProvider
         );
 
         $this->app->bind('whmcs', function () {
-            return new Whmcs([                
-                'url'            => config('whmcs.url'),
+            return new Whmcs([
+                'url' => config('whmcs.url'),
                 'api_identifier' => config('whmcs.api_identifier'),
-                'api_secret'     => config('whmcs.api_secret'),
+                'api_secret' => config('whmcs.api_secret'),
             ]);
         });
     }

@@ -1,12 +1,15 @@
-<?php // WARNING! Ensure <?php is the very first line of this file
+<?php
 
-use \WHMCS\Module\RegistrarSetting;
+// WARNING! Ensure <?php is the very first line of this file
 
-if (!defined("WHMCS"))
-    die("This file cannot be accessed directly");
+use WHMCS\Module\RegistrarSetting;
+
+if (! defined('WHMCS')) {
+    exit('This file cannot be accessed directly');
+}
 
 try {
-    logModuleCall("Custom action: SetRegistrarSettingValue", "Start", $_REQUEST, "", "", "");
+    logModuleCall('Custom action: SetRegistrarSettingValue', 'Start', $_REQUEST, '', '', '');
 
     $setting = RegistrarSetting::where('registrar', '=', $_REQUEST['registrar'])
         ->where('setting', '=', $_REQUEST['setting'])
@@ -17,16 +20,16 @@ try {
     $setting->save();
 
     $apiresults = [
-        "result" => "success",
-        "id" => $setting->id,
-        "registrar" => $setting->registrar,
-        "setting" => $setting->setting,
-        "value" => $setting->value,
+        'result' => 'success',
+        'id' => $setting->id,
+        'registrar' => $setting->registrar,
+        'setting' => $setting->setting,
+        'value' => $setting->value,
     ];
 } catch (Exception $e) {
     $apiresults = [
-        "result" => "error",
-        "message" => $e->getMessage(),
-        "log" => $log,
+        'result' => 'error',
+        'message' => $e->getMessage(),
+        'log' => $log,
     ];
 }

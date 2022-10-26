@@ -2,6 +2,10 @@
 
 All notable changes to `whmcs-php-api` will be documented in this file.
 
+## v0.1.2 - 2022-10-26
+
+- Also ask for setting when retrieving registrar values
+
 ## v0.1.1 - 2022-10-26
 
 - Added a custom action setregistrarvalue

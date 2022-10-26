@@ -4,5 +4,5 @@ namespace FintechSystems\Whmcs\Contracts;
 
 interface BillingProvider
 {
-    public function changePlan(Array $data);
+    public function changePlan(array $data);
 }
