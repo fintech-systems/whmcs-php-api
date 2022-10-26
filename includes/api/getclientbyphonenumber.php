@@ -22,8 +22,7 @@ try {
     if ($client) {
 
         $apiresults = [
-            "result"   => "success",
-            "message"  => "ok",
+            "result"   => "success",            
             'clientid' => $client->id,
         ];
 
@@ -35,8 +34,7 @@ try {
 
         if ($client) {
             $apiresults = [
-                "result"   => "success",
-                "message"  => "ok",
+                "result"   => "success",                
                 'clientid' => $client->id,
             ];
 

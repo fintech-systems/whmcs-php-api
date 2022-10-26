@@ -1,9 +1,9 @@
 <?php
 
-use FintechSystems\Whmcs\Whmcs;
+use FintechSystems\Whmcs\Whmcs as WhmcsApi;
 use Illuminate\Support\Facades\Http;
 use FintechSystems\Whmcs\Tests\Config;
-use FintechSystems\Whmcs\Facades\Whmcs as WhmcsFacade;
+use FintechSystems\Whmcs\Facades\Whmcs;
 
 $config = new Config();
 
@@ -27,7 +27,7 @@ test('it can access a test whmcs installation', function () {
 })->skip();
 
 test("adding a new user to WHMCS doesn't return an invalid IP error", function () use ($config) {
-    $whmcs = new Whmcs($config->server);
+    $whmcs = new WhmcsApi($config->server);
 
     Http::fake([
         'https://whmcs.test/includes/api.php' => Http::response([
@@ -56,7 +56,7 @@ test("adding a new user to WHMCS doesn't return an invalid IP error", function (
 });
 
 test("it will add an USA user with telephone number and dashes to the system for later testing", function () use ($config) {
-    $whmcs = new Whmcs($config->server);
+    $whmcs = new WhmcsApi($config->server);
 
     Http::fake([
         'https://whmcs.test/includes/api.php' => Http::response([
@@ -85,7 +85,7 @@ test("it will add an USA user with telephone number and dashes to the system for
 });
 
 test('it can add a user to the billing system', function () use ($config) {
-    $whmcs = new Whmcs($config->server);
+    $whmcs = new WhmcsApi($config->server);
 
     Http::fake([
         'https://whmcs.test/includes/api.php' => Http::response([
@@ -114,7 +114,7 @@ test('it can add a user to the billing system', function () use ($config) {
 });
 
 test('it can find a South African user by telephone number in the billing system', function () use ($config) {
-    $whmcs = new Whmcs($config->server);
+    $whmcs = new WhmcsApi($config->server);
 
     Http::fake([
         'https://whmcs.test/includes/api.php' => Http::response([
@@ -134,7 +134,7 @@ test('it can find a South African user by telephone number in the billing system
 });
 
 test('it can find a South African user by telephone number without spaces in the billing system', function () use ($config) {
-    $whmcs = new Whmcs($config->server);
+    $whmcs = new WhmcsApi($config->server);
 
     Http::fake([
         'https://whmcs.test/includes/api.php' => Http::response([
@@ -152,12 +152,11 @@ test('it can find a South African user by telephone number without spaces in the
 });
 
 test('it can find a South African user by telephone with spaces in the billing system', function () use ($config) {
-    $whmcs = new Whmcs($config->server);
+    $whmcs = new WhmcsApi($config->server);
 
     Http::fake([
         'https://whmcs.test/includes/api.php' => Http::response([
             "result" => "success",
-            "message" => "ok",
             "clientid" => 4,
         ])
     ]);
@@ -170,7 +169,7 @@ test('it can find a South African user by telephone with spaces in the billing s
 });
 
 test('it can find a USA user by telephone number in the billing system', function () use ($config) {
-    $whmcs = new Whmcs($config->server);
+    $whmcs = new WhmcsApi($config->server);
 
     Http::fake([
         'https://whmcs.test/includes/api.php' => Http::response([
@@ -196,7 +195,7 @@ test('it can connect to a WHMCS instance using the Laravel facade and pull a cli
         ])
     ]);
 
-    $result = WhmcsFacade::getClientsDetails([
+    $result = Whmcs::getClientsDetails([
         'clientid' => 1
     ]);
 
@@ -204,7 +203,7 @@ test('it can connect to a WHMCS instance using the Laravel facade and pull a cli
 });
 
 test("it can connect to a secondary WHMCS instance using a Laravel facade and retrieve a client's details", function () {
-    WhmcsFacade::setServer(
+    Whmcs::setServer(
         [
             'url'            => env('WHMCS_URL2'),
             'api_secret'     => env('WHMCS_API_SECRET2'),
@@ -220,12 +219,12 @@ test("it can connect to a secondary WHMCS instance using a Laravel facade and re
         ])
     ]);
 
-    $result = WhmcsFacade::getClientsDetails([
+    $result = Whmcs::getClientsDetails([
         'clientid' => 1
     ]);
 
     expect($result)->toHaveKey('result', 'success');
-});
+})->skip();
 
 test("it can retrieve at least two domains", function () {
     Http::fake([
@@ -255,7 +254,7 @@ test("it can retrieve at least two domains", function () {
         ])
     ]);
 
-    $result = WhmcsFacade::getClientsDomains();
+    $result = Whmcs::getClientsDomains();
 
     expect($result)->toHaveKey('result', 'success');
     expect($result)->toHaveKey('numreturned', 2);
@@ -264,4 +263,67 @@ test("it can retrieve at least two domains", function () {
     $count = count($result['domains']['domain']);
 
     expect($count)->toBe(2);
+});
+
+test("it retrieve registrars", function () {
+    Http::fake([
+        'https://whmcs.test/includes/api.php' => Http::response([
+            "status" => "success",
+            "registrars" => [
+                0 => [
+                    "module" => "email",
+                    "display_name" => "Email Notifications"
+                ],
+                1 => [
+                    "module" => "enom",
+                    "display_name" => "Enom"
+                ],
+
+            ]
+        ])
+    ]);
+
+    $result = Whmcs::getRegistrars();
+
+    expect($result)->toHaveKey('status', 'success');
+    expect($result)->toHaveKey(['registrars']['0']);
+});
+
+// sh .scp updateclientaddon.php;./vendor/bin/pest
+test("it can use a modified UpdateClientAddon API action to inject new API actions", function () {
+    Http::fake([
+        'https://whmcs.test/includes/api.php' => Http::response([
+            "result" => "success",
+            "permissions" => '{...,"updateclientaddon":1,"updatecontact":1,"setregistrarvalue":1,"getclientbyphonenumber":1}',
+        ])
+    ]);
+
+    $result = Whmcs::addApiCalls(
+        [
+            'setregistrarvalue',
+            'getclientbyphonenumber'
+        ]
+    );
+
+    expect($result)->toHaveKey('result', 'success');    
+    expect($result['permissions'])
+        ->toContain('"setregistrarvalue":1,"getclientbyphonenumber"');
+});
+
+// sh .scp updateclientaddon.php;./vendor/bin/pest
+test("it can call a custom API action called 'setRegistrarValue'", function () {
+    Http::fake([
+        'https://whmcs.test/includes/api.php' => Http::response([
+            "registrar" => "email",
+            "setting" => "EmailAddress",
+            "value" => "test4@example.com",
+        ])
+    ]);
+
+    $result = Whmcs::setRegistrarValue(
+        'email',
+        'test4@example.com'
+    );
+
+    expect($result)->toHaveKey('value', 'test4@example.com');    
 });

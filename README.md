@@ -166,11 +166,32 @@ A new package is applied to the service. If the package is linked to an API, the
 
 # Testing
 
-Run the following command to test:
+`./vendor/bin/pest`
 
-./vendor/bin/pest
+If you want to run individual tests, append `->only();` to each test.
 
-If you want to test individual tests, append this to the end of a test `->only();`.
+To test custom API actions, use a script such as the following:
+
+`sh .scp updateclientaddon.php;./vendor/bin/pest`
+
+The `.scp` file should have a copy command, e.g.:
+
+```bash
+#!/bin/bash
+echo "Present Working Directory:"
+pwd
+echo "Copying $1 to WHMCS install directory"
+
+cp includes/api/$1 ../whmcs/includes/api
+echo "Done."
+ls -la ../whmcs/includes/api/$1
+```
+
+## No errors on API actions but not working
+
+API actions are difficult to troubleshoot if you don't observe the server log file. Only some exceptions e.g. model problems will be caught by the Try Catch block. So help tail your server log file. For example, if you're using Laravel's Valet's NGinx server do this:
+
+`tail -f ~/.valet/Log/nginx-error.log`
 
 ## Invalid IP 127.0.0.1
 
