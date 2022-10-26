@@ -294,36 +294,37 @@ test("it can use a modified UpdateClientAddon API action to inject new API actio
     Http::fake([
         'https://whmcs.test/includes/api.php' => Http::response([
             "result" => "success",
-            "permissions" => '{...,"updateclientaddon":1,"updatecontact":1,"setregistrarvalue":1,"getclientbyphonenumber":1}',
+            "permissions" => '{...,"getclientbyphonenumber":1,"setregistrarsettingvalue":1}',
         ])
     ]);
 
     $result = Whmcs::addApiCalls(
         [
-            'setregistrarvalue',
-            'getclientbyphonenumber'
+            'getclientbyphonenumber',
+            'setregistrarsettingvalue',            
         ]
     );
 
     expect($result)->toHaveKey('result', 'success');    
     expect($result['permissions'])
-        ->toContain('"setregistrarvalue":1,"getclientbyphonenumber"');
+        ->toContain('"getclientbyphonenumber":1,"setregistrarsettingvalue"');
 });
 
-// sh .scp updateclientaddon.php;./vendor/bin/pest
-test("it can call a custom API action called 'setRegistrarValue'", function () {
+// sh .scp setregistrarsettingvalue.php;./vendor/bin/pest
+test("it can call a custom API action called 'setRegistrarSettingValue'", function () {
     Http::fake([
         'https://whmcs.test/includes/api.php' => Http::response([
             "registrar" => "email",
             "setting" => "EmailAddress",
-            "value" => "test4@example.com",
+            "value" => "test6@example.com",
         ])
     ]);
 
-    $result = Whmcs::setRegistrarValue(
+    $result = Whmcs::setRegistrarSettingValue(
         'email',
-        'test4@example.com'
+        'EmailAddress',
+        'test6@example.com'
     );
 
-    expect($result)->toHaveKey('value', 'test4@example.com');    
+    expect($result)->toHaveKey('value', 'test6@example.com');    
 });

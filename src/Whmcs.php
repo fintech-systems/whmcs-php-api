@@ -192,10 +192,11 @@ class Whmcs implements BillingProvider
     /**
      * Custom: Set registrar value
      */
-    public function setRegistrarValue($registrar, $value)
+    public function setRegistrarSettingValue($registrar, $setting, $value)
     {
-        return $this->call("SetRegistrarValue", [
+        return $this->call("SetRegistrarSettingValue", [
             'registrar' => $registrar,
+            'setting' => $setting,
             'value' => $value,
         ]);
     }
