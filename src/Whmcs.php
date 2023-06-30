@@ -190,7 +190,7 @@ class Whmcs implements BillingProvider
      */
     public function getProducts()
     {
-        ray("getProducts");
+        ray('getProducts');
 
         return $this->call('GetProducts');
     }
