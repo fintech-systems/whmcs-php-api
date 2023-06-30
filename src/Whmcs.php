@@ -190,6 +190,8 @@ class Whmcs implements BillingProvider
      */
     public function getProducts()
     {
+        ray("getProducts");
+
         return $this->call('GetProducts');
     }
 
@@ -311,7 +313,7 @@ class Whmcs implements BillingProvider
         $postfields = array_merge($data, $this->data, $postfields);
 
         // Output input to API call
-        // ray($postfields);
+        ray($postfields);
 
         $apiUrl = $this->url.'/includes/api.php';
 

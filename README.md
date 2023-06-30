@@ -232,8 +232,15 @@ For local editing, add this to `composer.json`:
 Then in `require` section:
 
 ```json
-"fintech-systems/virtualmin-api": "dev-main",
+"fintech-systems/whmcs-php-api": "dev-main",
 ```
+
+Then do this to symlink:
+
+```bash
+composer require fintech-systems/whmcs-php-api:dev-main
+```
+
 
 # License
 
