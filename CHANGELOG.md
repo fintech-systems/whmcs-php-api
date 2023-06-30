@@ -2,6 +2,11 @@
 
 All notable changes to `whmcs-php-api` will be documented in this file.
 
+## Unreleased
+
+- Fix typo in readme when hooking up for local development
+- Added back some ray calls in API and remove an old comment
+
 ## v0.1.2 - 2022-10-26
 
 - Also ask for setting when retrieving registrar values
