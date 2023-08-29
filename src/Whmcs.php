@@ -117,6 +117,8 @@ class Whmcs implements BillingProvider
      * Get clients
      *
      * https://developers.whmcs.com/api-reference/getclients/
+     *
+     * See the URL for the limitation of only seeing a very small subset of information
      */
     public function getClients($data = [])
     {
@@ -329,16 +331,18 @@ class Whmcs implements BillingProvider
             }
         }
 
-        // Output output from API call
-        // ray($response->json());
-
         return $response->json();
     }
 
-    private function throwExceptionIfUrlNotPresent()
+    /**
+     * Throw exception if the API variables have not been set
+     *
+     * @throws Exception
+     */
+    private function throwExceptionIfUrlNotPresent(): void
     {
         if (! $this->url) {
-            $error = 'The API URL was not found. Please check your environment settings.';
+            $error = 'The WHMCS API URL was not found. Please ensure the configuration has been published and check your environment for the following three variables: WHMCS_URL, WHMCS_API_IDENTIFIER, WHMCS_API_SECRET';
 
             ray($error)->red();
 

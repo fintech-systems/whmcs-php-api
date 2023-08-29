@@ -5,14 +5,14 @@ A WHMCS API designed to run standalone or as part of a Laravel Application
 
 Requirements:
 
-- PHP 8.0
+- PHP 8.1
 - WHMCS
 
 # Why this package?
 
 WHMCS already has an extensive API. Why build another API? The reason is quite simple:
 
-The WHMCS API code examples relies on CURL. Mocking CURL is possible but complicated. Instead Laravel already has beautiful HTTP testing and Http::fake mocking. Using Laravel (and in this case, Pest) means application development is sped up tremendously. Essentially you get away from testing against development servers. Even if you're not using Laravel, the framework's testing ability means it's possibly to write more complex software that's fail safe.
+The WHMCS API code examples depend on CURL. Mocking CURL is possible but complicated. Instead, Laravel already has beautiful HTTP testing and Http::fake mocking. Using Laravel (and in this case, Pest) means application development is sped up tremendously. Essentially you get away from testing against development servers. Even if you're not using Laravel, the framework's testing ability means it's possibly to write more complex software that's fail safe.
 
 # Usage
 
@@ -224,9 +224,9 @@ For local editing, add this to `composer.json`:
 "repositories" : [
         {
             "type": "path",
-            "url": "../whmcs-api"
+            "url": "../whmcs-php-api"
         }
-    ]
+    ],
 ```
 
 Then in `require` section:
